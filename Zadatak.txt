@@ -1,0 +1,160 @@
+FED Kurs: Parcijalni test
+----------------------------------------------------------------------------------------------------------------------
+ZADATAK:
+	index.html: (Kod pisati u fajlu skripta.js: ./js/skripta.js)
+		--------------
+			Izvršiti validaciju forme upotrebom JavaScript tehnologije.	
+			Sva polja u formi moraju biti unesena kako bi se forma submitovala,
+			pocetno slovo Grada mora biti veliko i skracenica za naziv zemlje ne sme imati vise od tri karaktera.
+			
+			Na formi se nalazi jedan checkbox, i dva selecta. Inicijalno je "Countries" select prazan. 
+			Prilikom otvaranja stranice potrebno je popuniti pomenuti select sa skracenicama za nazive zemalja iz "Countries" niza koji je inicijalno i zadat.
+			
+			Pored Countries selecta, postoji jos jedan select sa id-em sel2 i inicijalno je sakriven i onemogucen (disabled).
+			Kad korisnik odabere odgovarajucu zemlju u prvom selectu, potrebno je ucitati gradove, odnosno njihove nazive iz niza "cities" koji je dat, za odabranu zemlju i ubaciti ih u drugi sel2, potrebno je prikazati drugi select (promeniti njegov visibility) i aktivirati (da nije vise disabled). 
+			Primer: za vrednost RS u prvom selektu, drugi treba da sadrzi vrednosti Beograd, Novi Sad, Nis.
+
+			Napomena: klasa za sel2, se takodje naziva sel2.			
+
+			Sel2 sadrzi gradove za zemlju koja je odabrana. Potrebno je prilikom menjanja vrednosti gradova u selektu, ukoliko je odabran glavni npr: Madrid, checkbox koji se naziva "Capital" potrebno ga je cekirati/selektovati. Ukoliko se sa Madrida promeni na Valenciu ili Barcelonu, potrebno ga je deselektovati.
+			
+			Forma se ne moze submitovati ukoliko polja nisu popunjena.
+
+			Pomoc: Ukoliko neko treba da ocisti vrednosti(options) iz nekog selekta, to se moze uraditi na sledeci nacin: sel1.options.length = 0;
+
+			Napredno
+			---------------------
+			Omoguciti da se automatski prilikom otvaranja stranice, nakon ucitavanja zemalja, ucitaju i gradovi za datu zemlju. Primer, ukoliko je RS prva zemlja koja je u selektu, treba popuniti gradove i za tu zemlju u drugom selektu.
+			Omoguciti da se prilikom menjanja zemlje, menja i vrednost checkbox-a Capital. Odnosno, ukoliko je zemlja bila UK i grad London, kad se vrednost u prvom selektu prebaci na "ESP", checkbox treba deselektovati.
+
+	
+ts.html (Kod pisati u fajlove app.ts fakuletet.ts predmet.ts)
+		--------------
+			Osnovno
+			---------------------
+
+			NAPOMENA: Pre pocetka rada, u ts.html izbrisati/zakomentarisati sledeci script tag: <script src="js/kriptovano.js"></script>
+
+			Data je klasa Ispit, Implementirati klasu Predmet i Fakultet.
+
+			Implementirati klasu Predmet (fajl predmet.ts), koja se sastoji od:
+				-atributa:
+					private _imeProfesora: string;
+    				private _prezimeProfesora: string;
+    				private _idPredmeta: number;
+					private _nazivPredmeta: string;
+				-konstruktora
+				-geteri za sva polja
+				-seteri za sva polja
+
+    		Implementirati klasu Fakultet (fajl fakultet.ts), koja se sastoji od:
+				-atributa:
+					private _naziv: string;
+    				private _predmeti: Predmet[];
+    				private _ispiti: Ispit[];
+				-konstruktora (prima parametar naziv, a nizove inicijalizuje na prazne nizove)
+				-geteri za sva polja
+				-seteri za sva polja
+			    -metoda:
+			    	-dodajIspit //prima objekat tipa Ispit i dodaje ga u niz _ispiti
+			    	-refreshIspis 
+			    	-izracunajProlaznostPoPredmetu 
+					-najlaksiProfesorPoNacinuPolaganja
+
+
+			-------
+			Metoda refreshIspis u tbody tabele upisuje podatke o ispitima fakulteta po formatu:
+			Redni broj (indeks ispita uvecan za 1), ime i prezime studenta, id i naziv predmeta, deo ispita (teorija ili kolokvijum), datum ispita, i bodovi.
+			Ukoliko kandidat ima 35 (od maksimalnih 70) i vise bodova iz kolokvijuma, smatra se da je polozio kolokvijum.
+			A ako ima 10 (od maksimalnih 30) ili vise bodova iz teoretskog dela ispita, samatra se da je polozio teoriju. U odgovarajucem td-u treba dodati klasu green, ukoliko je student polozio taj deo ispita (bodovi > od bodova za deo), a ako nije polozio treba se dodati klasu red.
+			Prilikom generisanja tr-ova sa podacima, podatke mozete cuvati u promenljivoj i na kraju upisati u tbody vrednost kao innerHTML.
+
+			Primer izgleda tabele:
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Student</th>
+						<th>Predmet</th>
+						<th>Deo ispita</th>
+						<th>Datum</th>
+						<th>Bodovi</th>
+					</tr>
+				</thead>
+				<tbody id="tbody">
+					<tr>
+						<td>1</td>
+						<td>Jovan Jovanovic</td>
+						<td>(1) - Algoritimi</td>
+						<td>teorija</td>
+						<td>2022-02-11</td>
+						<td class="red">5</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Jovan Jovanovic</td>
+						<td>(1) - Algoritimi</td>
+						<td>kolokvijum</td>
+						<td>2022-03-05</td>
+						<td class="green">60</td>
+					</tr>
+					.
+					.
+					.
+				</table>
+			
+
+			-------
+			Metoda izracunajProlaznostPoPredmetu treba da primi dva parametra:
+			
+			deoIspita: string
+			predmet: Predmet
+			
+			Metoda nema povratnu vrednost: tip void.
+			
+			Metoda racuna prolaznost za odgovarajuci deo ispita prosledjenog predmeta. 
+			Za predmet, atribut idPredmeta je jedinstven, odnosno ne bi trebalo da postoje dva predmeta sa istim idom predmeta.
+
+			Za resavanje, pronaci sve ispite za prosledjeni predmet, na kojima se polagao prosledjen deo ispita i izracunati procentualnu prolaznost.
+			Rezultat upisati u div #podaci.
+
+			Procentualna vrednost se dobija po formuli: (bpi * 100) / ubi
+			Gde je:
+				bpi - broj polozenih ispita za dati predmet
+				ubi - ukupan broj ispita za dati predmet
+
+			Ispis treba da bude u formatu:
+			<h3>Prolaznost za ${deoIspita} za predmet ${nazivPredmeta} je ${izracunata vrednost prolaznosti za deo ispita kod izabranog predmeta}</h3>
+
+			-------
+			Metoda najlaksiProfesorPoNacinuPolaganja ne prima parametre i nema povratnu vrednost.
+
+			Za oba nacina polaganja: pronaci koji profesor (predmet) ima najvise polozenih ispita po nacinu polaganja (ispita ciji broj bodova je veci ili jednak od 35 sa kolokvijume i veci ili jednak od 10 za teoriju).
+
+			(Pronalazenje predmeta ciji je broj ispita maksimalan)
+
+			U divu sa idom "podaci" se ispisuje:
+			<h3>Profesor sa najlaksim teoretskim ispitom je ${ime i prezime profesora sa najvecim brojem polozene teorije} sa ukupno ${broj polozenih testova za najlakseg profesora} polozenih ispita.</h3>
+			<br>
+			<h3>Profesor sa najlaksim kolokvijumom je  ${ime i prezime profesora sa najvecim brojem polozenih kolokvijuma} sa ukupno ${broj polozenih kolokvijuma za najlakseg profesora} polozenih kolokvijuma.</h3>
+			
+			
+			+++++++
+			Implementirati funkciju wireEvents (fajl app.ts) koja povezuje klik dogadjaje sa dugmicima:
+				-za dodajIspit: kupe se informacije o ispitu iz odgvarajucih input polja, pravi se dva nova objekta tipa Ispit (jedan za Teorija deo ispita, jedan za Kolokvijum deo ispita), 
+				                novi objekti kao predmet koriste aktivan predmet, i objekti se dodaju u objekat fakuletet. Nakon dodavanja pozvati metodu refreshIspis fakulteta.
+				-za izracunajProlaznostPoPredmetu: preuzima se vrednost selecta nacinPolaganjaSelekt, i poziva se metoda izracunajProlaznostPoPredmetu objekta fakultet prosledjivanjem preuzete vrednosti selekta i aktivnog predmeta
+				-za najlaksiProfesorPoNacinuPolaganja: poziva se metoda najlaksiProfesorPoNacinuPolaganja fakulteta
+				
+
+			Napredno
+			------------------------------------
+			U klasi Fakultet Implementirati metodu polozenPredmet. Dodati odgovarajuce dugme na html (hardcodirati u html).
+
+			Metoda polozenPredmet, prima parametar predmet:Predmet i nema povratnu vrednost.
+			Metoda za prosledjeni predmet pronalazi studente koji su polozili predmet, odnosno polozili i teoriju i kolokvijum (pri cemu zbir bodova polozene teorije i kolokvijuma treba da bude veci od 50).
+			Za pronadjene studente tj. pronadjene ispite ispisuje u tabelu po istom formatu kao metoda refresh ispis.
+
+			U funkciji wireEvents povezati klik na odgovaracuje dugme sa metodom polozenPredmet.
+			
